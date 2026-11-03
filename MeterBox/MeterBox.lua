@@ -106,8 +106,8 @@ local dragging,ox,oy=false,0,0
 local function drag()
  if not hwnd or c.locked then return end
  local mx,my=reaper.GetMousePosition()
- local ok,x,y=reaper.JS_Window_ScreenToClient(hwnd,mx,my)
- if not ok then return end
+ local x,y=reaper.JS_Window_ScreenToClient(hwnd,mx,my)
+ if not x or not y then return end
  local down=(reaper.JS_Mouse_GetState(1)&1)==1
  if down and not dragging then
   if x>=c.x and x<=c.x+c.w and y>=c.y and y<=c.y+c.h then dragging=true; ox=x-c.x; oy=y-c.y end
