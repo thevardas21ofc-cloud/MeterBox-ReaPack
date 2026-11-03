@@ -49,6 +49,7 @@ end
 local function api(n) return reaper.APIExists(n) end
 local jsok=api("JS_Composite") and api("JS_Composite_Unlink") and api("JS_LICE_CreateBitmap") and api("JS_LICE_DestroyBitmap") and api("JS_LICE_Clear") and api("JS_LICE_FillRect") and api("JS_Window_FindChild") and api("JS_Window_GetClientSize") and api("JS_Window_ScreenToClient") and api("JS_Window_InvalidateRect") and api("JS_Mouse_GetState")
 local hwnd,bmp,bw,bh,linked
+local font
 local function find_transport()
  local main=reaper.GetMainHwnd()
  local h=reaper.JS_Window_FindChild(main,"Transport",true)
@@ -115,6 +116,7 @@ local function drag()
 end
 -- Settings window
 local settings=false
+local floating=false
 local function open_settings()
  if settings then return end
  settings=true; gfx.init("MeterBox Settings",360,300,0); gfx.setfont(1,"Arial",14)
@@ -154,7 +156,6 @@ local function settings_loop()
  local ch=gfx.getchar()
  if ch<0 or ch==27 then settings=false; gfx.quit(); if c.mode=="floating" then floating=false end end
 end
-local floating=false
 local function start_float() gfx.init("MeterBox",c.w,c.h,0); gfx.setfont(1,"Arial",11); floating=true end
 local function loop()
  if reaper.GetExtState(S,"open_settings")=="1" then reaper.SetExtState(S,"open_settings","",false); open_settings(); if c.mode=="floating" then floating=false end end
@@ -181,7 +182,6 @@ if c.mode=="transport" and not jsok then
  local a=reaper.ShowMessageBox("Transport overlay requires js_ReaScriptAPI. Choose Yes for floating mode, or No to stop.","MeterBox",1)
  if a==1 then c.mode="floating"; save() else return end
 end
-local font
 reaper.SetExtState(S,"running","1",false)
 reaper.atexit(function()
  reaper.SetExtState(S,"running","",false); destroy()
