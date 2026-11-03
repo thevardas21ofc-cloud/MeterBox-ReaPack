@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index version="1" name="MeterBox-ReaPack">
+  <category name="MeterBox">
+    <reapack name="MeterBox - REAPER Master Meter" type="script" desc="Stereo master peak meter for REAPER">
+      <metadata>
+        <description><![CDATA[Compact stereo master meter with continuous L/R bars, peak markers and appearance settings.]]></description>
+        <link rel="website" href="https://github.com/thevardas21ofc-cloud/MeterBox-ReaPack">Project repository</link>
+      </metadata>
+      <version name="0.5.1" author="MeterBox" time="2026-11-03T12:30:00Z">
+        <changelog><![CDATA[First published test build. Floating meter, direct master peak feed, peak markers and settings window.]]></changelog>
+        <source main="main" file="MeterBox.lua">https://raw.githubusercontent.com/thevardas21ofc-cloud/MeterBox-ReaPack/main/MeterBox/MeterBox.lua</source>
+        <source file="MeterBox - Open Settings.lua">https://raw.githubusercontent.com/thevardas21ofc-cloud/MeterBox-ReaPack/main/MeterBox/MeterBox%20-%20Open%20Settings.lua</source>
+      </version>
+    </reapack>
+  </category>
+</index>
