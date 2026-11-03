@@ -1,7 +1,7 @@
 --[[
 @description MeterBox - REAPER Master Meter
 @author MeterBox
-@version 0.5.3
+@version 0.5.4
 @provides
   [main] MeterBox.lua
   MeterBox - Open Settings.lua
@@ -20,7 +20,7 @@ local function save() for k,v in pairs(c) do reaper.SetExtState(S,k,tostring(v),
 local function clamp(v,a,b) return math.max(a,math.min(b,v)) end
 local function db(v) if not v or v<=0 then return c.min end return clamp(20*math.log(v,10),c.min,c.max) end
 local function norm(v) return clamp((v-c.min)/(c.max-c.min),0,1) end
-local function rgb(h) return tonumber(h,16) or 0 end
+local function rgb(h) return 0xFF000000 | (tonumber(h,16) or 0) end
 local function gfxcol(h) local n=rgb(h); gfx.set(((n>>16)&255)/255,((n>>8)&255)/255,(n&255)/255,1) end
 local L,R,HL,HR=c.min,c.min,c.min,c.min
 local function levels()
@@ -106,8 +106,8 @@ local dragging,ox,oy=false,0,0
 local function drag()
  if not hwnd or c.locked then return end
  local mx,my=reaper.GetMousePosition()
- local x,y=reaper.JS_Window_ScreenToClient(hwnd,mx,my)
- if not x or not y then return end
+ local ok,x,y=reaper.JS_Window_ScreenToClient(hwnd,mx,my)
+ if not ok then return end
  local down=(reaper.JS_Mouse_GetState(1)&1)==1
  if down and not dragging then
   if x>=c.x and x<=c.x+c.w and y>=c.y and y<=c.y+c.h then dragging=true; ox=x-c.x; oy=y-c.y end
