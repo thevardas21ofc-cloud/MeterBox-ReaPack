@@ -19,7 +19,7 @@ Compact stereo master peak meter with a transport-bar overlay and floating-windo
 - Independent colour controls for left meter, right meter, meter background, panel background, peak marker and scale marks. Click each colour row in Settings to cycle through the available swatches.
 - Adjustable width and height, peak hold, channel labels and lock position.
 
-## Settings window (v0.6.1)
+## Settings window (v0.7.0)
 
 - Opens centered over the REAPER main window and is brought to the foreground.
 - Requires js_ReaScriptAPI for the foreground/focus helpers; the settings remain available without them but window focus behavior may depend on the OS.
