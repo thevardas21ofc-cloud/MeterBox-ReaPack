@@ -6,8 +6,8 @@
         <description><![CDATA[Compact stereo master meter with continuous L/R bars, peak markers and appearance settings.]]></description>
         <link rel="website" href="https://github.com/thevardas21ofc-cloud/MeterBox-ReaPack">Project repository</link>
       </metadata>
-      <version name="0.8.0" author="MeterBox" time="2026-11-25T13:00:00Z">
-        <changelog><![CDATA[Makes MeterBox a standalone floating window, separate from the transport; keeps separate movable settings.]]></changelog>
+      <version name="0.8.1" author="MeterBox" time="2026-11-25T13:15:00Z">
+        <changelog><![CDATA[Standalone floating MeterBox window, separate from the transport; separate movable settings.]]></changelog>
         <source main="main" file="MeterBox.lua">https://raw.githubusercontent.com/thevardas21ofc-cloud/MeterBox-ReaPack/main/MeterBox/MeterBox.lua</source>
         <source file="MeterBox - Open Settings.lua">https://raw.githubusercontent.com/thevardas21ofc-cloud/MeterBox-ReaPack/main/MeterBox/MeterBox%20-%20Open%20Settings.lua</source>
       </version>
