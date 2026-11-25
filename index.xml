@@ -6,8 +6,8 @@
         <description><![CDATA[Compact stereo master meter with continuous L/R bars, peak markers and appearance settings.]]></description>
         <link rel="website" href="https://github.com/thevardas21ofc-cloud/MeterBox-ReaPack">Project repository</link>
       </metadata>
-      <version name="0.6.0" author="MeterBox" time="2026-11-25T08:00:00Z">
-        <changelog><![CDATA[Introduces compact minimal stereo bars, scale ticks and independently adjustable meter, panel, peak and scale colours.]]></changelog>
+      <version name="0.6.1" author="MeterBox" time="2026-11-25T10:00:00Z">
+        <changelog><![CDATA[Fixes settings window placement and foreground focus so appearance controls open accessibly.]]></changelog>
         <source main="main" file="MeterBox.lua">https://raw.githubusercontent.com/thevardas21ofc-cloud/MeterBox-ReaPack/main/MeterBox/MeterBox.lua</source>
         <source file="MeterBox - Open Settings.lua">https://raw.githubusercontent.com/thevardas21ofc-cloud/MeterBox-ReaPack/main/MeterBox/MeterBox%20-%20Open%20Settings.lua</source>
       </version>
