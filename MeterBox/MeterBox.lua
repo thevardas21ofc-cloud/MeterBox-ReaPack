@@ -68,10 +68,6 @@ local function loop()
  reaper.defer(loop)
 end
 if not reaper.GetMasterTrack or not reaper.Track_GetPeakInfo then reaper.ShowMessageBox("Master peak API unavailable.","MeterBox",0); return end
-if c.mode=="transport" and not jsok then
- local a=reaper.ShowMessageBox("Transport overlay requires js_ReaScriptAPI. Choose Yes for floating mode, or No to stop.","MeterBox",1)
- if a==1 then c.mode="floating"; save() else return end
-end
 reaper.SetExtState(S,"running","1",false)
 reaper.atexit(function()
  reaper.SetExtState(S,"running","",false)
