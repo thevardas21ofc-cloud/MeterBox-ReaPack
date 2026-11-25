@@ -1,3 +1,7 @@
+## 0.7.0\n- Rebuilt Settings as a separate ReaScript window instead of sharing the meter's gfx context.
+- Settings window is independently movable and receives its own mouse input.
+- Meter loop continues reading the REAPER master peak APIs; display loop uses REAPER's deferred UI cycle with a 60 Hz target interval documented in source.
+
 # Changelog
 
 ## 0.6.1 - 2026-11-25
