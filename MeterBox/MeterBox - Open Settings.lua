@@ -1,7 +1,7 @@
 --[[
 @description MeterBox - Open Settings
 @author MeterBox
-@version 0.8.0
+@version 0.8.1
 @about Opens a separate, movable settings window for the running MeterBox master meter.
 ]]
 local S="MeterBox"
@@ -56,8 +56,7 @@ local function draw()
  color("171B20"); gfx.rect(0,0,420,410,1)
  color("E8EDF2"); gfx.x=16; gfx.y=14; gfx.drawstr("METERBOX  /  APPEARANCE")
  color("89949F"); gfx.x=16; gfx.y=38; gfx.drawstr("Settings are saved automatically.")
- button(16,62,188,30,"Transport overlay",c.mode=="transport")
- button(216,62,188,30,"Floating window",c.mode=="floating")
+ button(16,62,388,30,"Standalone floating meter window",true)
  button(16,100,188,30,"Lock position: "..(c.locked and "ON" or "OFF"),c.locked)
  button(216,100,188,30,"Peak hold: "..(c.hold and "ON" or "OFF"),c.hold)
  button(16,138,188,30,"Width: "..c.w.." px  (+16)",false)
@@ -75,8 +74,7 @@ local function loop()
  if (gfx.mouse_cap&1)~=0 and not mouse_down then
   mouse_down=true
   local mx,my=gfx.mouse_x,gfx.mouse_y
-  if my>=62 and my<92 then c.mode=mx<210 and "transport" or "floating"
-  elseif my>=100 and my<130 then if mx<210 then c.locked=not c.locked else c.hold=not c.hold end
+  if my>=100 and my<130 then if mx<210 then c.locked=not c.locked else c.hold=not c.hold end
   elseif my>=138 and my<168 then
    if mx<210 then c.w=c.w+16; if c.w>400 then c.w=144 end
    else c.h=c.h+4; if c.h>64 then c.h=30 end end
