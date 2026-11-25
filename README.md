@@ -13,11 +13,16 @@ Compact stereo master peak meter with a transport-bar overlay and floating-windo
 4. Run **MeterBox - REAPER Master Meter** from the Actions list.
 5. Run **MeterBox - Open Settings** to change display mode and appearance.
 
-## Appearance (v0.6.0)
+## Appearance (v0.6.0+)
 
 - Minimal two-bar stereo display, default size 176 × 42 px.
 - Independent colour controls for left meter, right meter, meter background, panel background, peak marker and scale marks. Click each colour row in Settings to cycle through the available swatches.
 - Adjustable width and height, peak hold, channel labels and lock position.
+
+## Settings window (v0.6.1)
+
+- Opens centered over the REAPER main window and is brought to the foreground.
+- Requires js_ReaScriptAPI for the foreground/focus helpers; the settings remain available without them but window focus behavior may depend on the OS.
 
 ## Transport overlay
 
