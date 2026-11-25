@@ -10,7 +10,6 @@
   Requires js_ReaScriptAPI for transport mode; floating mode is available as fallback.
 ]]
 local S="MeterBox"
-local UPDATE_INTERVAL=1/60
 local D={mode="transport",locked=true,x=8,y=5,w=176,h=42,bg="171B20",track="303840",left="35DDB0",right="35DDB0",peak="F4F6F8",scale="69737D",text="D8DEE6",labels=false,hold=true,min=-60,max=0}
 local c={}
 for k,v in pairs(D) do
@@ -135,13 +134,13 @@ local function loop()
   if floating then gfx.quit(); floating=false end
   if not hwnd or not reaper.JS_Window_IsWindow(hwnd) then hwnd=nil; attach() else drag(); attach() end
   if bmp and linked then draw_lice(); reaper.JS_Window_InvalidateRect(hwnd,c.x,c.y,c.x+bw,c.y+bh,true) end
- elseif c.mode=="floating" and not settings then
+ elseif c.mode=="floating" then
   if bmp then destroy() end
   hwnd=nil
   if not floating then start_float() end
   if gfx.getchar()<0 then return end
   if (gfx.mouse_cap&2)==2 then request_settings(); floating=false else draw_gfx() end
- elseif c.mode=="transport" and not jsok and not settings then
+ elseif c.mode=="transport" and not jsok then
   reaper.ShowMessageBox("Transport overlay requires js_ReaScriptAPI. Install it or choose Floating window in settings.","MeterBox",0)
   c.mode="floating"; save()
  end
