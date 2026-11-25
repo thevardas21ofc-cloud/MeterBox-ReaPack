@@ -1,13 +1,12 @@
 --[[
 @description MeterBox - REAPER Master Meter
 @author MeterBox
-@version 0.8.0
+@version 0.8.2
 @provides
   [main] MeterBox.lua
   MeterBox - Open Settings.lua
 @about
-  Stereo master peak meter with a JS_ReaScriptAPI overlay in REAPER's transport bar.
-  Requires js_ReaScriptAPI for transport mode; floating mode is available as fallback.
+  Standalone floating stereo master peak meter window, separate from the REAPER transport.
 ]]
 local S="MeterBox"
 local D={mode="floating",locked=true,x=8,y=5,w=176,h=42,bg="171B20",track="303840",left="35DDB0",right="35DDB0",peak="F4F6F8",scale="69737D",text="D8DEE6",labels=false,hold=true,min=-60,max=0}
