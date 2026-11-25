@@ -54,11 +54,6 @@ end
 -- Standalone floating meter window. It is intentionally not composited
 -- into the transport, so it remains a separate movable REAPER gfx window.
 local floating=false
-local function start_float()
- gfx.init("MeterBox",c.w,c.h,0)
- gfx.setfont(1,"Arial",11)
- floating=true
-end
 -- Settings are handled by a separate action/script instance. This avoids
 -- sharing the meter's gfx context with the settings window.
 local function request_settings()
@@ -80,8 +75,7 @@ if c.mode=="transport" and not jsok then
 end
 reaper.SetExtState(S,"running","1",false)
 reaper.atexit(function()
- reaper.SetExtState(S,"running","",false); destroy()
- if font and reaper.JS_LICE_DestroyFont then pcall(reaper.JS_LICE_DestroyFont,font) end
+ reaper.SetExtState(S,"running","",false)
  gfx.quit()
 end)
 loop()
