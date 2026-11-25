@@ -1,7 +1,7 @@
 --[[
 @description MeterBox - Open Settings
 @author MeterBox
-@version 0.7.0
+@version 0.8.0
 @about Opens a separate, movable settings window for the running MeterBox master meter.
 ]]
 local S="MeterBox"
