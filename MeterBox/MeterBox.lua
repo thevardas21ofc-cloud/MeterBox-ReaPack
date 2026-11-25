@@ -1,7 +1,7 @@
 --[[
 @description MeterBox - REAPER Master Meter
 @author MeterBox
-@version 0.6.1
+@version 0.7.0
 @provides
   [main] MeterBox.lua
   MeterBox - Open Settings.lua
@@ -10,6 +10,7 @@
   Requires js_ReaScriptAPI for transport mode; floating mode is available as fallback.
 ]]
 local S="MeterBox"
+local UPDATE_INTERVAL=1/60
 local D={mode="transport",locked=true,x=8,y=5,w=176,h=42,bg="171B20",track="303840",left="35DDB0",right="35DDB0",peak="F4F6F8",scale="69737D",text="D8DEE6",labels=false,hold=true,min=-60,max=0}
 local c={}
 for k,v in pairs(D) do
@@ -122,85 +123,14 @@ local function drag()
  elseif down and dragging then c.x=math.max(0,math.floor(x-ox)); c.y=math.max(0,math.floor(y-oy))
  elseif not down and dragging then dragging=false; save(); destroy() end
 end
--- Settings window
-local settings=false
-local floating=false
-local settings_hwnd
-local function raise_settings()
- if not settings_hwnd and gfx.gethwnd then settings_hwnd=gfx.gethwnd() end
- if settings_hwnd and reaper.JS_Window_IsWindow and reaper.JS_Window_IsWindow(settings_hwnd) then
-  if reaper.JS_Window_Show then pcall(reaper.JS_Window_Show,settings_hwnd,"SHOW") end
-  if reaper.JS_Window_SetZOrder then pcall(reaper.JS_Window_SetZOrder,settings_hwnd,"TOP",nil) end
-  if reaper.JS_Window_SetForeground then pcall(reaper.JS_Window_SetForeground,settings_hwnd) end
-  if reaper.JS_Window_SetFocus then pcall(reaper.JS_Window_SetFocus,settings_hwnd) end
- end
-end
-local function open_settings()
- if settings then raise_settings(); return end
- local x,y=180,140
- if reaper.JS_Window_GetRect then
-  local ok,l,t,r,b=reaper.JS_Window_GetRect(reaper.GetMainHwnd())
-  if ok then x=math.max(20,math.floor(l+(r-l-400)/2)); y=math.max(20,math.floor(t+(b-t-390)/2)) end
- end
- settings=true
- gfx.init("MeterBox Settings",400,390,0,x,y)
- gfx.setfont(1,"Arial",14)
- settings_hwnd=gfx.gethwnd and gfx.gethwnd() or nil
- raise_settings()
-end
-local function btn(x,y,w,h,s,on)
- gfxcol(on and "315B53" or "343B43"); gfx.roundrect(x,y,w,h,5,1)
- gfxcol("E8EDF2"); gfx.x=x+8; gfx.y=y+7; gfx.drawstr(s)
-end
-local md=false
-local swatches={"35DDB0","58A6FF","7CDA65","FFB454","F06B82","B58CFF","E6E9ED","FFFFFF","20252B","171B20","303840","69737D"}
-local function cycle_color(key)
- local n=1
- for i,v in ipairs(swatches) do if v==c[key] then n=i end end
- c[key]=swatches[n%#swatches+1]
-end
-local function settings_loop()
- gfxcol("171B20"); gfx.rect(0,0,400,390,1)
- gfxcol("E8EDF2"); gfx.x=16; gfx.y=14; gfx.drawstr("METERBOX  /  APPEARANCE")
- gfxcol("89949F"); gfx.x=16; gfx.y=38; gfx.drawstr("Click a colour to cycle through the swatches.")
- btn(16,62,176,30,"Transport overlay",c.mode=="transport")
- btn(208,62,176,30,"Floating window",c.mode=="floating")
- btn(16,100,176,30,"Lock position: "..(c.locked and "ON" or "OFF"),c.locked)
- btn(208,100,176,30,"Peak hold: "..(c.hold and "ON" or "OFF"),c.hold)
- btn(16,138,176,30,"Width: "..c.w.." px",false)
- btn(208,138,176,30,"Height: "..c.h.." px",false)
- local rows={{"left","Left meter"},{ "right","Right meter" },{"track","Meter background"},{"bg","Panel background"},{"peak","Peak marker"},{"scale","Scale marks"}}
- for i,r in ipairs(rows) do
-  local y=180+(i-1)*29
-  btn(16,y,176,25,r[2],false)
-  gfxcol(r[1]=="left" and c.left or r[1]=="right" and c.right or c[r[1]])
-  gfx.rect(208,y+5,176,15,1)
- end
- btn(16,358,368,26,"Close settings",false)
- gfx.update()
- raise_settings()
- if (gfx.mouse_cap&1)==1 and not md then
-  md=true; local x,y=gfx.mouse_x,gfx.mouse_y
-  if y>=62 and y<92 then c.mode=x<200 and "transport" or "floating"
-  elseif y>=100 and y<130 then if x<200 then c.locked=not c.locked else c.hold=not c.hold end
-  elseif y>=138 and y<168 then
-   if x<200 then c.w=c.w+16; if c.w>400 then c.w=144 end
-   else c.h=c.h+4; if c.h>64 then c.h=30 end end
-  elseif y>=180 and y<354 then
-   local idx=math.floor((y-180)/29)+1
-   if idx>=1 and idx<=#rows then cycle_color(rows[idx][1]) end
-  elseif y>=358 then settings=false; settings_hwnd=nil; gfx.quit(); if c.mode=="floating" then floating=false end
-  end
-  save(); if c.mode=="transport" then destroy() end
- elseif (gfx.mouse_cap&1)==0 then md=false end
- local ch=gfx.getchar()
- if ch<0 or ch==27 then settings=false; settings_hwnd=nil; gfx.quit(); if c.mode=="floating" then floating=false end end
+-- Settings are handled by a separate action/script instance. This avoids
+-- sharing the meter's gfx context with the settings window.
+local function request_settings()
+ reaper.SetExtState(S,"open_settings","1",false)
 end
 local function start_float() gfx.init("MeterBox",c.w,c.h,0); gfx.setfont(1,"Arial",11); floating=true end
 local function loop()
- if reaper.GetExtState(S,"open_settings")=="1" then reaper.SetExtState(S,"open_settings","",false); open_settings(); if c.mode=="floating" then floating=false end end
  levels()
- if settings then settings_loop() end
  if c.mode=="transport" and jsok then
   if floating then gfx.quit(); floating=false end
   if not hwnd or not reaper.JS_Window_IsWindow(hwnd) then hwnd=nil; attach() else drag(); attach() end
@@ -210,7 +140,7 @@ local function loop()
   hwnd=nil
   if not floating then start_float() end
   if gfx.getchar()<0 then return end
-  if (gfx.mouse_cap&2)==2 then open_settings(); floating=false else draw_gfx() end
+  if (gfx.mouse_cap&2)==2 then request_settings(); floating=false else draw_gfx() end
  elseif c.mode=="transport" and not jsok and not settings then
   reaper.ShowMessageBox("Transport overlay requires js_ReaScriptAPI. Install it or choose Floating window in settings.","MeterBox",0)
   c.mode="floating"; save()
