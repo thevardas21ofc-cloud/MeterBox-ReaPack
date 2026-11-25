@@ -1,7 +1,7 @@
 --[[
 @description MeterBox - Open Settings
 @author MeterBox
-@version 0.8.2
+@version 0.8.4
 @about Opens the settings panel inside the standalone floating MeterBox window.
 ]]
 if reaper.GetExtState("MeterBox","running")=="" then
