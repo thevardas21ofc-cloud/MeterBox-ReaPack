@@ -1,6 +1,6 @@
 # MeterBox for REAPER 8
 
-Stereo master peak meter with a transport-bar overlay and floating-window fallback.
+Compact stereo master peak meter with a transport-bar overlay and floating-window fallback.
 
 ## Install with ReaPack
 
@@ -13,16 +13,21 @@ Stereo master peak meter with a transport-bar overlay and floating-window fallba
 4. Run **MeterBox - REAPER Master Meter** from the Actions list.
 5. Run **MeterBox - Open Settings** to change display mode and appearance.
 
+## Appearance (v0.6.0)
+
+- Minimal two-bar stereo display, default size 176 × 42 px.
+- Independent colour controls for left meter, right meter, meter background, panel background, peak marker and scale marks. Click each colour row in Settings to cycle through the available swatches.
+- Adjustable width and height, peak hold, channel labels and lock position.
+
 ## Transport overlay
 
 - Requires the **js_ReaScriptAPI** extension.
 - The default mode is the transport-bar overlay.
 - In Settings, choose **Lock position: OFF** to drag the meter inside the transport bar; turn it back ON to lock it.
-- Settings include overlay/floating mode, labels, peak markers, width, height and color palette.
 - The overlay is drawn over the Transport window; it is not a native REAPER transport control. Window themes, layouts, DPI scaling and OS differences can affect its placement.
 
 ## Meter source
 
 The bars read the two channels of REAPER's master track using `Track_GetPeakInfo`. Peak-hold markers use `Track_GetPeakHoldDB` when available.
 
-This release has been published for user testing. The overlay has not been runtime-tested on every REAPER 8 layout/OS. If it fails, please send the exact error text, line number, REAPER version and OS.
+The overlay has not been runtime-tested on every REAPER 8 layout/OS. If it fails, please send the exact error text, line number, REAPER version and OS.
