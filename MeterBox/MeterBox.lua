@@ -1,7 +1,7 @@
 --[[
 @description MeterBox - REAPER Master Meter
 @author MeterBox
-@version 0.8.2
+@version 0.8.3
 @provides
   [main] MeterBox.lua
   MeterBox - Open Settings.lua
