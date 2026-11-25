@@ -1,7 +1,7 @@
 --[[
 @description MeterBox - REAPER Master Meter
 @author MeterBox
-@version 0.6.0
+@version 0.6.1
 @provides
   [main] MeterBox.lua
   MeterBox - Open Settings.lua
@@ -125,9 +125,28 @@ end
 -- Settings window
 local settings=false
 local floating=false
+local settings_hwnd
+local function raise_settings()
+ if not settings_hwnd and gfx.gethwnd then settings_hwnd=gfx.gethwnd() end
+ if settings_hwnd and reaper.JS_Window_IsWindow and reaper.JS_Window_IsWindow(settings_hwnd) then
+  if reaper.JS_Window_Show then pcall(reaper.JS_Window_Show,settings_hwnd,"SHOW") end
+  if reaper.JS_Window_SetZOrder then pcall(reaper.JS_Window_SetZOrder,settings_hwnd,"TOP",nil) end
+  if reaper.JS_Window_SetForeground then pcall(reaper.JS_Window_SetForeground,settings_hwnd) end
+  if reaper.JS_Window_SetFocus then pcall(reaper.JS_Window_SetFocus,settings_hwnd) end
+ end
+end
 local function open_settings()
- if settings then return end
- settings=true; gfx.init("MeterBox Settings",400,390,0); gfx.setfont(1,"Arial",14)
+ if settings then raise_settings(); return end
+ local x,y=180,140
+ if reaper.JS_Window_GetRect then
+  local ok,l,t,r,b=reaper.JS_Window_GetRect(reaper.GetMainHwnd())
+  if ok then x=math.max(20,math.floor(l+(r-l-400)/2)); y=math.max(20,math.floor(t+(b-t-390)/2)) end
+ end
+ settings=true
+ gfx.init("MeterBox Settings",400,390,0,x,y)
+ gfx.setfont(1,"Arial",14)
+ settings_hwnd=gfx.gethwnd and gfx.gethwnd() or nil
+ raise_settings()
 end
 local function btn(x,y,w,h,s,on)
  gfxcol(on and "315B53" or "343B43"); gfx.roundrect(x,y,w,h,5,1)
@@ -159,6 +178,7 @@ local function settings_loop()
  end
  btn(16,358,368,26,"Close settings",false)
  gfx.update()
+ raise_settings()
  if (gfx.mouse_cap&1)==1 and not md then
   md=true; local x,y=gfx.mouse_x,gfx.mouse_y
   if y>=62 and y<92 then c.mode=x<200 and "transport" or "floating"
@@ -169,12 +189,12 @@ local function settings_loop()
   elseif y>=180 and y<354 then
    local idx=math.floor((y-180)/29)+1
    if idx>=1 and idx<=#rows then cycle_color(rows[idx][1]) end
-  elseif y>=358 then settings=false; gfx.quit(); if c.mode=="floating" then floating=false end
+  elseif y>=358 then settings=false; settings_hwnd=nil; gfx.quit(); if c.mode=="floating" then floating=false end
   end
   save(); if c.mode=="transport" then destroy() end
  elseif (gfx.mouse_cap&1)==0 then md=false end
  local ch=gfx.getchar()
- if ch<0 or ch==27 then settings=false; gfx.quit(); if c.mode=="floating" then floating=false end end
+ if ch<0 or ch==27 then settings=false; settings_hwnd=nil; gfx.quit(); if c.mode=="floating" then floating=false end end
 end
 local function start_float() gfx.init("MeterBox",c.w,c.h,0); gfx.setfont(1,"Arial",11); floating=true end
 local function loop()
